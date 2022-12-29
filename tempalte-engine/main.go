@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"flag"
-	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -16,7 +15,6 @@ var (
 )
 
 func main() {
-
 	flag.Parse()
 	args := flag.Args()
 	if len(args) != 1 {
@@ -30,6 +28,9 @@ func main() {
 		log.Fatal(err)
 	}
 	if err := GoModInit(name); err != nil {
+		log.Fatal(err)
+	}
+	if err := OpenVSCode(name); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -71,10 +72,18 @@ func GoModInit(path string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("curr dir is: ", currDir)
 
 	cmd := exec.Command("go", "mod", "init", "kek.com")
 	cmd.Dir = currDir + "/" + path
 	_, err = cmd.Output()
+	return err
+}
+
+func OpenVSCode(path string) error {
+	if runtime.GOOS == "windows" {
+		return ErrArch
+	}
+
+	_, err := exec.Command("code", path).Output()
 	return err
 }
