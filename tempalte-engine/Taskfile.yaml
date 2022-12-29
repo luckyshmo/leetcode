@@ -1,0 +1,8 @@
+version: "3"
+
+tasks:
+  build: go build -o gotemplate
+  local-publish:
+    cmds:
+      - task build
+      - cp gotemplate $GOPATH/bin
