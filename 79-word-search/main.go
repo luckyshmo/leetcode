@@ -48,11 +48,16 @@ func search(board [][]byte, word string, x, y int, visited [][]bool) bool {
 		defer func() {
 			visited[y][x] = false
 		}()
-		t := search(board, word[1:], x, y+1, visited)
-		b := search(board, word[1:], x, y-1, visited)
-		l := search(board, word[1:], x-1, y, visited)
-		r := search(board, word[1:], x+1, y, visited)
-		if t || b || l || r {
+		if search(board, word[1:], x, y+1, visited) {
+			return true
+		}
+		if search(board, word[1:], x, y-1, visited) {
+			return true
+		}
+		if search(board, word[1:], x-1, y, visited) {
+			return true
+		}
+		if search(board, word[1:], x+1, y, visited) {
 			return true
 		}
 	}
