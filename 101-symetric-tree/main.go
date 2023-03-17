@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func main() {
 	//! [1,2,2,null,3,null,3] false
 	n3 := &TreeNode{
@@ -33,55 +31,71 @@ type TreeNode struct {
 }
 
 func isSymmetric(root *TreeNode) bool {
-	if root == nil {
-		return true
-	}
-	if root.Left == nil && root.Right == nil {
-		return true
-	}
-	if root.Left != nil && root.Right == nil {
-		return false
-	}
-	if root.Left == nil && root.Right != nil {
-		return false
-	}
-	return inorderTraversalRL(root.Right) == inorderTraversalLR(root.Left)
+	return rec(root.Left, root.Right)
 }
 
-func inorderTraversalLR(root *TreeNode) (res string) {
-	stack := []*TreeNode{root}
-	var currNode *TreeNode
-	for len(stack) > 0 {
-		currNode = stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		res += fmt.Sprint(currNode.Val)
-		if currNode.Right != nil {
-			res += "r"
-			stack = append(stack, currNode.Right)
+func rec(left, right *TreeNode) bool {
+	if left == nil || right == nil {
+		if left == nil && right == nil {
+			return true
 		}
-		if currNode.Left != nil {
-			res += "l"
-			stack = append(stack, currNode.Left)
-		}
+		return false
 	}
-	return
+	return left.Val == right.Val && rec(left.Left, right.Right) && rec(left.Right, right.Left)
 }
 
-func inorderTraversalRL(root *TreeNode) (res string) {
-	stack := []*TreeNode{root}
-	var currNode *TreeNode
-	for len(stack) > 0 {
-		currNode = stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		res += fmt.Sprint(currNode.Val)
-		if currNode.Left != nil {
-			res += "r"
-			stack = append(stack, currNode.Left)
-		}
-		if currNode.Right != nil {
-			res += "l"
-			stack = append(stack, currNode.Right)
-		}
-	}
-	return
-}
+// Stack
+
+// func isSymmetric(root *TreeNode) bool {
+// 	if root == nil {
+// 		return true
+// 	}
+// 	if root.Left == nil && root.Right == nil {
+// 		return true
+// 	}
+// 	if root.Left != nil && root.Right == nil {
+// 		return false
+// 	}
+// 	if root.Left == nil && root.Right != nil {
+// 		return false
+// 	}
+// 	return inorderTraversalRL(root.Right) == inorderTraversalLR(root.Left)
+// }
+
+// func inorderTraversalLR(root *TreeNode) (res string) {
+// 	stack := []*TreeNode{root}
+// 	var currNode *TreeNode
+// 	for len(stack) > 0 {
+// 		currNode = stack[len(stack)-1]
+// 		stack = stack[:len(stack)-1]
+// 		res += fmt.Sprint(currNode.Val)
+// 		if currNode.Right != nil {
+// 			res += "r"
+// 			stack = append(stack, currNode.Right)
+// 		}
+// 		if currNode.Left != nil {
+// 			res += "l"
+// 			stack = append(stack, currNode.Left)
+// 		}
+// 	}
+// 	return
+// }
+
+// func inorderTraversalRL(root *TreeNode) (res string) {
+// 	stack := []*TreeNode{root}
+// 	var currNode *TreeNode
+// 	for len(stack) > 0 {
+// 		currNode = stack[len(stack)-1]
+// 		stack = stack[:len(stack)-1]
+// 		res += fmt.Sprint(currNode.Val)
+// 		if currNode.Left != nil {
+// 			res += "r"
+// 			stack = append(stack, currNode.Left)
+// 		}
+// 		if currNode.Right != nil {
+// 			res += "l"
+// 			stack = append(stack, currNode.Right)
+// 		}
+// 	}
+// 	return
+// }
