@@ -21,9 +21,13 @@ func numIslands(grid [][]byte) (res int) {
 }
 
 func nullify(grid [][]byte, c, r int) {
-	if c < len(grid[0]) && r < len(grid) && grid[r][c] == '1' {
+	if c < len(grid[0]) && c >= 0 &&
+		r < len(grid) && r >= 0 &&
+		grid[r][c] == '1' {
 		grid[r][c] = 0
 		nullify(grid, c+1, r)
 		nullify(grid, c, r+1)
+		nullify(grid, c, r-1)
+		nullify(grid, c-1, r)
 	}
 }
