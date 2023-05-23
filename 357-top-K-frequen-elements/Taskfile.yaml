@@ -1,0 +1,9 @@
+version: "3"
+
+tasks:
+  git:
+    desc: fast commit
+    cmds:
+      - git add .
+      - git commit -m "357-top-K-frequen-elements"
+      - git push -u origin $(git rev-parse --abbrev-ref HEAD)
