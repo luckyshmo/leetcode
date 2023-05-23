@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -24,7 +25,15 @@ func main() {
 	if name == "" {
 		log.Fatal(ErrName)
 	}
+
+	if err := os.Mkdir(name, os.ModePerm); err != nil {
+		log.Fatal(err)
+	}
+
 	if err := MainGo(name); err != nil {
+		log.Fatal(err)
+	}
+	if err := Taskfile(name); err != nil {
 		log.Fatal(err)
 	}
 	if err := GoModInit(name); err != nil {
@@ -46,9 +55,6 @@ func main() {
 	fmt.Println()
 }
 `
-	if err := os.Mkdir(path, os.ModePerm); err != nil {
-		return err
-	}
 	f, err := os.Create(path + "/main.go")
 	if err != nil {
 		return err
@@ -56,6 +62,31 @@ func main() {
 	defer f.Close()
 
 	_, err = f.WriteString(mainGo)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Taskfile(path string) error {
+	content := fmt.Sprintf(`version: "3"
+
+tasks:
+  git:
+    desc: fast commit
+    cmds:
+      - git add .
+      - git commit -m "%s"
+      - git push -u origin $(git rev-parse --abbrev-ref HEAD)
+`, path)
+	f, err := os.Create(path + "/Taskfile.yaml")
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	_, err = f.WriteString(content)
 	if err != nil {
 		return err
 	}
